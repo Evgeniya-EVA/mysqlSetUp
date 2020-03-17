@@ -136,6 +136,26 @@ public class AuthorizationTest {
     }
 
     @Test
+    void systemShouldBeBlockedAfterInputWrongPasswordThreeTimes(){
+        loginPage = new LoginPage()
+                .setLoginInput(validLogin)
+                .setPasswordInput(DataHelper.getUserPassword())
+                .pressLoginBtn()
+                .errorNotificationShouldAppear()
+                .setLoginInput(validLogin)
+                .setPasswordInput(DataHelper.getUserPassword())
+                .pressLoginBtn()
+                .errorNotificationShouldAppear()
+                .setLoginInput(validLogin)
+                .setPasswordInput(DataHelper.getUserPassword())
+                .pressLoginBtn()
+                .errorNotificationShouldAppear()
+                .setLoginInput(validLogin)
+                .setPasswordInput(DataHelper.getUserPassword())
+                .loginButtonShouldBeDisable();
+    }
+
+    @Test
     void emptyLoginSubTextShouldAppear(){
         loginPage = new LoginPage()
                 .setPasswordInput(validPassword)

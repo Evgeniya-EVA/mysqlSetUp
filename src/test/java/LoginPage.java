@@ -1,5 +1,7 @@
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
+import org.openqa.selenium.Keys;
+
 import static com.codeborne.selenide.Selenide.$;
 
 public class LoginPage {
@@ -13,12 +15,23 @@ public class LoginPage {
     private String warningColor = "rgba(255, 92, 92, 1)";
 
     public LoginPage setLoginInput(String loginInput) {
-        this.loginInput.setValue(loginInput);
+        if (!this.loginInput.getValue().isEmpty()){
+            this.loginInput.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
+            this.loginInput.clear();
+            this.loginInput.sendKeys(loginInput);
+        } else {
+            this.loginInput.sendKeys(loginInput);
+        }
         return this;
     }
 
     public LoginPage setPasswordInput(String passwordInput) {
-        this.passwordInput.setValue(passwordInput);
+        if (!this.passwordInput.getValue().isEmpty()){
+            this.passwordInput.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
+            this.passwordInput.sendKeys(passwordInput);
+        } else {
+            this.passwordInput.sendKeys(passwordInput);
+        }
         return this;
     }
 
@@ -54,5 +67,10 @@ public class LoginPage {
 
     public VerificationPage loadVerificationPage(){
         return new VerificationPage();
+    }
+
+    public LoginPage loginButtonShouldBeDisable(){
+        loginBtn.shouldBe(Condition.disabled);
+        return this;
     }
 }
