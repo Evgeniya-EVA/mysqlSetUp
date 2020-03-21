@@ -1,4 +1,5 @@
 import com.codeborne.selenide.Selenide;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -9,10 +10,31 @@ public class AuthorizationTest {
     LoginPage loginPage;
     String validLogin = "vasya";
     String validPassword = "qwerty123";
+    String validLogin2 = "petya";
+    String validPassword2 = "123qwerty";
 
     @BeforeEach
     void setUp(){
         Selenide.open("http://localhost:9999");
+    }
+
+    @AfterAll
+    static void dbClear() throws SQLException {
+        DataHelper.clearDB();
+    }
+
+    @Test
+    void successAuthorization() throws SQLException {
+        VerificationPage verificationPage = new LoginPage()
+                .setLoginInput(validLogin2)
+                .setPasswordInput(validPassword2)
+                .pressLoginBtn()
+                .loadVerificationPage();
+        String userCode = DataHelper.getVerificationCode(validLogin2);
+        DashboardPage dashboardPage = verificationPage
+                .setCodeInput(userCode)
+                .verifyCorrectCode();
+        dashboardPage.dashboardPageShouldBeLoaded();
     }
 
     @Test
@@ -34,19 +56,7 @@ public class AuthorizationTest {
                 .errorNotificationShouldAppear();
     }
 
-    @Test
-    void successAuthorization() throws SQLException {
-        VerificationPage verificationPage = new LoginPage()
-                .setLoginInput(validLogin)
-                .setPasswordInput(validPassword)
-                .pressLoginBtn()
-                .loadVerificationPage();
-        String userCode = DataHelper.getVerificationCode(validLogin);
-        DashboardPage dashboardPage = verificationPage
-                .setCodeInput(userCode)
-                .verifyCorrectCode();
-        dashboardPage.dashboardPageShouldBeLoaded();
-    }
+
 
     @Test
     void authorizationWithWrongVerificationCode(){
@@ -154,6 +164,7 @@ public class AuthorizationTest {
                 .setPasswordInput(DataHelper.getUserPassword())
                 .loginButtonShouldBeDisable();
     }
+    
 
     @Test
     void emptyLoginSubTextShouldAppear(){

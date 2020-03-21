@@ -18,20 +18,17 @@ public class LoginPage {
         if (!this.loginInput.getValue().isEmpty()){
             this.loginInput.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
             this.loginInput.clear();
-            this.loginInput.sendKeys(loginInput);
-        } else {
-            this.loginInput.sendKeys(loginInput);
         }
+        this.loginInput.sendKeys(loginInput);
         return this;
     }
 
     public LoginPage setPasswordInput(String passwordInput) {
         if (!this.passwordInput.getValue().isEmpty()){
             this.passwordInput.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
-            this.passwordInput.sendKeys(passwordInput);
-        } else {
-            this.passwordInput.sendKeys(passwordInput);
+            this.passwordInput.clear();
         }
+        this.passwordInput.sendKeys(passwordInput);
         return this;
     }
 

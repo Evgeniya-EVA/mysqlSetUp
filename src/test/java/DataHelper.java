@@ -44,7 +44,7 @@ public class DataHelper {
         return faker.number().digits(7);
     }
 
-    private static void setMySQLConnection() throws SQLException {
+    public static void setMySQLConnection() throws SQLException {
         connection = DriverManager.getConnection(dbURL, dbUserName, dbUserPassword);
     }
 
@@ -89,5 +89,21 @@ public class DataHelper {
 
     public static void userStatusShouldNotBeActive(String status){
         Assertions.assertFalse("active".equalsIgnoreCase(status));
+    }
+
+    public static void clearDB() throws SQLException {
+        String deleteFromCardTransactions = "DELETE FROM card_transactions";
+        String deleteFromAuthCodes = "DELETE FROM auth_codes";
+        String deleteFromCards = "DELETE FROM cards";
+        String deleteFromUsers = "DELETE FROM users";
+
+        PreparedStatement cardTransactions = connection.prepareStatement(deleteFromCardTransactions);
+        PreparedStatement authCodes = connection.prepareStatement(deleteFromAuthCodes);
+        PreparedStatement cards = connection.prepareStatement(deleteFromCards);
+        PreparedStatement users = connection.prepareStatement(deleteFromUsers);
+        cardTransactions.executeUpdate();
+        authCodes.executeUpdate();
+        cards.executeUpdate();
+        users.executeUpdate();
     }
 }
